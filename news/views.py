@@ -5,6 +5,8 @@ from .models import News, Category, Vote
 from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+from django.db.models import Sum, Value
+from django.db.models.functions import Coalesce
 
 def news_list(request):
     query = request.GET.get('q')
@@ -19,13 +21,8 @@ def news_list(request):
     sort = request.GET.get('sort', '-created_at')
 
     news_qs = News.objects.select_related('category', 'author').annotate(
-        vote_count=Count('votes')
+        vote_sum=Coalesce(Sum('votes__value'), Value(0))
     )
-
-    print("🔍 All news count:", News.objects.count())
-    print("🔍 Filtered by category_id:", category_id)
-    if category_id:
-        print("🔍 News with category_id =", category_id, ":", News.objects.filter(category_id=category_id).count())
 
     if query:
         news_qs = news_qs.filter(
@@ -34,12 +31,9 @@ def news_list(request):
     if category_id:
         news_qs = news_qs.filter(category_id=category_id)
 
-    print("✅ Final queryset count:", news_qs.count())
-
-    # ... остальной код
 
     if sort == 'popular':
-        news_qs = news_qs.order_by('-vote_count', '-created_at')
+        news_qs = news_qs.order_by('-vote_sum', '-created_at')
     elif sort == 'oldest':
         news_qs = news_qs.order_by('created_at')
     else:

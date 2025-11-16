@@ -39,7 +39,7 @@
         </h5>
         <p class="text-muted">
             📂 {{ item.category.name }} | 📅 {{ item.created_at|date:"d M Y" }}
-            | 👍 {{ item.vote_count }}
+            | 👍 {{ item.vote_sum }}
             {% if item.author %}
                  | 🖋️ {{ item.author.username }}
             {% endif %}
