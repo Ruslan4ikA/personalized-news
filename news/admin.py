@@ -10,7 +10,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'author', 'created_at', 'get_total_votes')
+    list_display = ('title', 'category', 'author', 'created_at', 'get_total_votes',  'image')
     list_filter = ('category', 'created_at')
     search_fields = ('title', 'content')
 

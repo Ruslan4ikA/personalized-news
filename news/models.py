@@ -25,6 +25,7 @@ class News(BaseModel):
         related_name='authored_news'
     )
     is_published = models.BooleanField(default=True)
+    image = models.ImageField(upload_to='news_images/', blank=True, null=True)
 
     def __str__(self):
         return self.title

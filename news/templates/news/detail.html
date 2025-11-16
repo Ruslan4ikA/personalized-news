@@ -8,6 +8,9 @@
 <div class="mb-3">
     {{ news.content|linebreaks }}
 </div>
+{% if news.image %}
+    <img src="{{ news.image.url }}" class="img-fluid mb-3" style="max-height: 400px; object-fit: cover;">
+{% endif %}
 
 <!-- Голосование -->
 <div class="mt-4">
