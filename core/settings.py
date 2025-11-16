@@ -29,6 +29,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Аутентификация
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+# Чтобы сообщения (например, об успешной регистрации) работали
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 # Application definition
 

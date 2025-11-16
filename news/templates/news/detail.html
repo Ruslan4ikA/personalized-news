@@ -27,7 +27,7 @@
             <a href="{% url 'news:vote' news.pk -1 %}" class="btn btn-danger">👎 Downvote</a>
         {% endif %}
     {% else %}
-        <p><a href="{{ login_url }}">Log in</a> to vote!</p>
+        <p><a href="{% url 'news:login' %}?next={{ request.get_full_path|urlencode }}">Войдите</a>, чтобы голосовать!</p>
     {% endif %}
 </div>
 

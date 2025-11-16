@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,9 +10,27 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <a class="navbar-brand" href="{% url 'news:list' %}">📰 Personalized News</a>
+            <div class="navbar-nav ms-auto">
+                {% if user.is_authenticated %}
+                    <span class="navbar-text me-3">Привет, <strong>{{ user.username }}</strong>!</span>
+                    <!-- Вместо <a> используем форму -->
+                    <form method="post" action="{% url 'news:logout' %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link nav-link">Выход</button>
+                    </form>
+                {% else %}
+                    <a class="nav-link" href="{% url 'news:login' %}">Вход</a>
+                    <a class="nav-link" href="{% url 'news:register' %}">Регистрация</a>
+                {% endif %}
+            </div>
         </div>
     </nav>
     <div class="container mt-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
         {% block content %}{% endblock %}
     </div>
 </body>

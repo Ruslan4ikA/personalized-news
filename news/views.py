@@ -3,6 +3,8 @@ from django.db.models import Count, Q
 from django.contrib.auth.decorators import login_required
 from .models import News, Category, Vote
 from django.conf import settings
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
 
 def news_list(request):
     query = request.GET.get('q')
@@ -74,3 +76,14 @@ def vote_news(request, pk, value):
         defaults={'value': value}
     )
     return redirect('news:detail', pk=pk)
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # автоматический вход после регистрации
+            return redirect('news:list')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
