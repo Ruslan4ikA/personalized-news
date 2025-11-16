@@ -57,7 +57,7 @@ def news_list(request):
 
 
 def news_detail(request, pk):
-    news_item = get_object_or_404(News, pk=pk)
+    news_item = get_object_or_404(News.objects.select_related('author', 'category'), pk=pk)
     user_vote = None
     if request.user.is_authenticated:
         user_vote = news_item.votes.filter(user=request.user).first()

@@ -40,6 +40,9 @@
         <p class="text-muted">
             📂 {{ item.category.name }} | 📅 {{ item.created_at|date:"d M Y" }}
             | 👍 {{ item.vote_count }}
+            {% if item.author %}
+                 | 🖋️ {{ item.author.username }}
+            {% endif %}
         </p>
         <p class="card-text">{{ item.content|truncatewords:30 }}</p>
         {% if item.image %}
