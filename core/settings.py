@@ -91,7 +91,7 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
+LOGIN_URL = '/admin/login/'  # используем админку для входа
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
