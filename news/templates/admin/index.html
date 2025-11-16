@@ -1,0 +1,15 @@
+{% extends "admin/index.html" %}
+
+{% block sidebar %}
+    {{ block.super }}
+    <div class="module" style="margin-top: 20px;">
+        <h2>Отчёты</h2>
+        <ul class="actionlist">
+            <li>
+                <a href="{% url 'news:admin_export' %}" class="btn btn-success" style="display: inline-block; padding: 6px 12px; color: white; text-decoration: none;">
+                    📊 Экспорт в Excel
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}

@@ -13,6 +13,9 @@
             <div class="navbar-nav ms-auto">
                 {% if user.is_authenticated %}
                     <span class="navbar-text me-3">Привет, <strong>{{ user.username }}</strong>!</span>
+                    {% if user.is_staff or user.is_superuser %}
+                        <a class="nav-link" href="{% url 'admin:index' %}">Админка</a>
+                    {% endif %}
                     <!-- Вместо <a> используем форму -->
                     <form method="post" action="{% url 'news:logout' %}" class="d-inline">
                         {% csrf_token %}
