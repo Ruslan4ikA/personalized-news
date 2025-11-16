@@ -9,21 +9,18 @@ def export_xlsx_view(request):
     if request.method == "POST":
         model_name = request.POST.get("model")
         selected_fields = request.POST.getlist("fields")
+        print("🔍 POST model_name:", model_name)
+        print("🔍 POST selected_fields:", selected_fields)
 
         if not model_name or model_name not in EXPORTABLE_MODELS:
             return HttpResponse("Invalid model", status=400)
 
-        model = EXPORTABLE_MODELS[model_name]
-        available_fields = [f.name for f in model._meta.get_fields() if not f.many_to_one and not f.is_relation or f.one_to_one]
-
-        # Фильтруем только существующие поля
-        safe_fields = [f for f in selected_fields if f in available_fields]
-
-        if not safe_fields:
-            return HttpResponse("No valid fields selected", status=400)
+        # Пропускаем фильтрацию — поля доверенные
+        if not selected_fields:
+            return HttpResponse("No fields selected", status=400)
 
         try:
-            buffer = generate_xlsx(model_name, safe_fields)
+            buffer = generate_xlsx(model_name, selected_fields)
             response = HttpResponse(
                 buffer.read(),
                 content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -38,7 +35,15 @@ def export_xlsx_view(request):
     fields = []
     if model_name and model_name in EXPORTABLE_MODELS:
         model = EXPORTABLE_MODELS[model_name]
-        fields = [f.name for f in model._meta.get_fields() if not f.many_to_one and (not f.is_relation or f.one_to_one)]
+        # Базовые поля
+        base_fields = [f.name for f in model._meta.get_fields()
+                       if not f.many_to_one and (not f.is_relation or f.one_to_one)]
+        # Дополнительные связанные поля
+        if model_name == 'news':
+            base_fields += ['author__username', 'category__name']
+        elif model_name == 'vote':
+            base_fields += ['user__username', 'news__title']
+        fields = base_fields
 
     # Готовим список для шаблона: [(имя_модели, человекочитаемое_название), ...]
     model_choices = []

@@ -27,6 +27,8 @@ def generate_xlsx(model_name, selected_fields):
 
     queryset = model.objects.all().values(*selected_fields)
 
+    print("📊 Export data sample:", list(queryset[:2]))
+
     wb = Workbook()
     ws = wb.active
     title = str(force_str(model._meta.verbose_name_plural or model.__name__))[:31]
